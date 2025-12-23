@@ -1,41 +1,52 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, Outlet } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import SmoothScroll from './components/core/SmoothScroll';
 import Cursor from './components/core/Cursor';
 import NoiseOverlay from './components/core/NoiseOverlay';
-import HeroSection from './components/sections/HeroSection';
-import ServicesSection from './components/sections/ServicesSection';
-import TestimonialsSection from './components/sections/TestimonialsSection';
-import ProcessStats from './components/sections/ProcessStats';
-import ProjectList from './components/sections/ProjectList';
-import TeamSection from './components/sections/TeamSection';
-import StatsCounterSection from './components/sections/StatsCounterSection';
-import RecommendationsSection from './components/sections/RecommendationsSection';
-import ClientsTicker from './components/sections/ClientsTicker';
-import FAQSection from './components/sections/FAQSection';
-import FinalCTA from './components/sections/FinalCTA';
-import Footer from './components/ui/Footer';
+import Navbar from './components/ui/Navbar';
+
+import Home from './pages/Home';
+import InProgress from './pages/InProgress';
+
+const Layout = () => {
+  return (
+    <>
+      <Navbar />
+      <Outlet />
+    </>
+  );
+};
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/pages" element={<InProgress title="Pages" />} />
+          <Route path="/blog" element={<InProgress title="Journal" />} />
+          <Route path="/shop" element={<InProgress title="Shop" />} />
+        </Route>
+      </Routes>
+    </AnimatePresence>
+  );
+};
 
 function App() {
   return (
-    <SmoothScroll>
-      <Cursor />
-      <NoiseOverlay />
-      
-      <main className="relative z-10 w-full min-h-screen">
-        <HeroSection />
-        <ServicesSection />
-        <TestimonialsSection />
-        <ProcessStats />
-        <ProjectList />
-        <TeamSection />
-        <StatsCounterSection />
-        <RecommendationsSection />
-        <ClientsTicker />
-        <FAQSection />
-        <FinalCTA />
-        <Footer />
-      </main>
-    </SmoothScroll>
+    <Router>
+      <SmoothScroll>
+        <Cursor />
+        <NoiseOverlay />
+        
+        <main className="relative z-10 w-full min-h-screen">
+          <AnimatedRoutes />
+        </main>
+      </SmoothScroll>
+    </Router>
   );
 }
 
